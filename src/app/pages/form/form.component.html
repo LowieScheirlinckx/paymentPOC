@@ -1,0 +1,16 @@
+<form nz-form [nzLayout]="'inline'" (ngSubmit)="submitForm()">
+    <nz-form-item>
+      <nz-form-control nzErrorTip="Gelieve een bedrag tussen 10 en 100 euro in te geven">
+        <nz-input-number-group nzPrefix="€">
+            <nz-input-number name="first" [(ngModel)]="bedrag" [nzMin]="10.01" [nzMax]="99.99" [nzPrecision]="2" ></nz-input-number>
+          </nz-input-number-group>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-control>
+        <button nz-button nzType="primary">Betaal</button>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+
+    
