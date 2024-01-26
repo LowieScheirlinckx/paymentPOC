@@ -11,9 +11,10 @@ import { nl_BE } from 'ng-zorro-antd/i18n';
 import { registerLocaleData } from '@angular/common';
 import nl from '@angular/common/locales/nl';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NzButtonModule } from 'ng-zorro-antd/button';
+import { AuthInterceptor } from './helpers/auth.interceptor';
 registerLocaleData(nl);
 
 @NgModule({
@@ -32,7 +33,9 @@ registerLocaleData(nl);
     NzButtonModule
   ],
   providers: [
-    { provide: NZ_I18N, useValue: nl_BE }
+    { provide: NZ_I18N, useValue: nl_BE },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+
   ],
   bootstrap: [AppComponent]
 })

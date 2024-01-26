@@ -10,10 +10,23 @@ export class PaymentService {
     constructor(private http:HttpClient){
 
     }
-
-    processPayment(body: any): Observable<any> {
-        const url = `${environment.apiUrl}/users/test`;
+    
+    processPayment(values: any): Observable<any> {
+        console.log(values)
+        const body = {
+                amount: { currency: 'EUR', value: values.amount.toFixed(2) },
+                description: values.description,
+                redirectUrl: `${environment.baseUrl}/payments`,
+        }
+        const url = `${environment.apiUrl}/payments/payment`;
         return this.http.post(url, body);
     }
+
+    getPayments(): Observable<any> {
+        const url = `${environment.apiUrl}/payments/getpayments`;
+        return this.http.get(url);
+    }
+
+    
 
 }

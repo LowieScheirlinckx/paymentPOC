@@ -4,6 +4,7 @@ import { FormControl } from '@angular/forms';
 import { Validators, NonNullableFormBuilder } from '@angular/forms';
 import { LoginService } from '../../services/login.service';
 import { Router } from '@angular/router';
+import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -22,8 +23,10 @@ export class LoginComponent implements OnInit {
 
   submitForm(): void {
     if (this.validateForm.valid) {
-      console.log('submit', this.validateForm.value);
-      this.loginService.login(this.validateForm.value)
+      this.loginService.login(this.validateForm.value).subscribe(value => {if (value) {
+        this.router.navigate(['/payments'])
+      }})
+      
     } else {
       Object.values(this.validateForm.controls).forEach(control => {
         if (control.invalid) {
@@ -34,7 +37,9 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  constructor(private loginService: LoginService, private fb: NonNullableFormBuilder) {}
+  constructor(private loginService: LoginService, private router:Router, private fb: NonNullableFormBuilder) {
+    loginService.logout()
+  }
   ngOnInit() { }
 
 }

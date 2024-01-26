@@ -11,7 +11,7 @@ export class AuthGuard {
     ) { }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        const currentUser = this.loginService.currentUserSubject;
+        const currentUser = localStorage.getItem('Token');
         if (currentUser) {
             // logged in so return true
             return true;

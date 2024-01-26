@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { FormControl } from '@angular/forms';
-import { Validators, NonNullableFormBuilder } from '@angular/forms';
+import { FormControl, Validators, NonNullableFormBuilder, FormGroup } from '@angular/forms';
 import { PaymentService } from '../../services/payment.service';
 import { Router } from '@angular/router';
+import { NumberValidator } from '../../validators/number.validator';
 
 
 @Component({
@@ -13,29 +12,53 @@ import { Router } from '@angular/router';
 })
 export class FormComponent implements OnInit {
 
-  minimumBedrag = 10.01
-  maximumBedrag = 99.99
-  bedrag = 50.00
-  constructor(private paymentService: PaymentService, private router: Router) { }
-
-
+  constructor(private paymentService: PaymentService, private router: Router, private fb : NonNullableFormBuilder) { }
+  validateForm: FormGroup<{
+    amount: FormControl<string>;
+    description:FormControl<string>;
+  }> = this.fb.group({
+    amount: ['', [Validators.required, NumberValidator()]],
+    description:['',[Validators.required, Validators.minLength(1), Validators.maxLength(50)]]
+  });
+  
   submitForm() {
-    try {
-        this.paymentService.processPayment({
-            amount: { currency: 'EUR', value: '15.00'},
-            description: 'test',
-            redirectUrl: 'http://localhost:4200/welcome',
-        }).subscribe(response => {
-            console.log(response);
-            window.location.href = response.checkout.href;
-
-            
-        });
-    } catch (error) {
-        console.error(error);
+    console.log(this.validateForm.value)
+    if (this.validateForm.valid) {
+      this.paymentService.processPayment(this.validateForm.value).subscribe(response => {
+              console.log(response);
+               window.location.href = response.checkout.href;
+                
+           });
+    } else {
+      Object.values(this.validateForm.controls).forEach(control => {
+        if (control.invalid) {
+          control.markAsDirty();
+          control.updateValueAndValidity({ onlySelf: true });
+        }
+      });
     }
+
+  //   try {
+  //     this.paymentService.processPayment({
+  //         amount: { currency: 'EUR', value: this.bedrag.toFixed(2) },
+  //         description: this.description,
+  //         redirectUrl: 'http://localhost:4200/payments',
+  //     }).subscribe(response => {
+  //         console.log(response);
+  //         window.location.href = response.checkout.href;
+
+          
+  //     });
+  // } catch (error) {
+  //     console.error(error);
+  // }
+}
+submitPayment() {
+      
 }
 
-  ngOnInit() { }
+  ngOnInit() { 
+    
+  }
 
 }

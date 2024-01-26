@@ -1,27 +1,44 @@
 import { HttpClient,HttpErrorResponse, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable } from "rxjs";
+import { BehaviorSubject, Observable, catchError, map } from "rxjs";
 import { environment } from "../../environments/environments";
+
 @Injectable({
     providedIn:'root'
 })
 
 export class LoginService {
+    private isLoggedInSubject: BehaviorSubject<boolean>;
 
-    public currentUserSubject
-
-    constructor(private http:HttpClient){
-        currentUserSubject : BehaviorSubject<string>;
-
+    get isLoggedIn$(): Observable<boolean> {
+      return this.isLoggedInSubject.asObservable();
+    }
+  
+    constructor(private http: HttpClient) {
+      this.isLoggedInSubject = new BehaviorSubject<boolean>(false);
     }
 
-    login(body: any) {
+
+    
+    login(body: any): Observable<boolean> {
         const url = `${environment.apiUrl}/users/login`;
-        
-        this.http.post(url, body).subscribe(response => {
-            const token = response['token']
-            this.currentUserSubject = token
-            console.log(token)
-    });
-    }
+    
+        return this.http.post(url, body).pipe(
+          map((response: any) => {
+            const token = response.token;
+            if (token) {
+              localStorage.setItem('Token', token);
+              this.isLoggedInSubject.next(true);
+              return true;
+            } else {
+              return false;
+            }
+          })
+        );
+      }
+    
+      logout(): void {
+        localStorage.removeItem('Token');
+        this.isLoggedInSubject.next(false);
+      }
 }
