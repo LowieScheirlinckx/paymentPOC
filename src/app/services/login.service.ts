@@ -36,6 +36,11 @@ export class LoginService {
           })
         );
       }
+
+      public hastoken(): boolean {
+        return localStorage.getItem('Token') !== '';
+      }
+    
     
       logout(): void {
         localStorage.removeItem('Token');

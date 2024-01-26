@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { LoginService } from './services/login.service';
 
 @Component({
   selector: 'app-root',
@@ -8,15 +7,10 @@ import { LoginService } from './services/login.service';
 })
 export class AppComponent { 
   isCollapsed = false
-  isLoggedIn = false
-  constructor(private loginService: LoginService)
+  constructor()
   {
     
   }
 
-  ngOnInit(): void {
-    this.loginService.isLoggedIn$.subscribe((loggedIn: boolean) => {
-      this.isLoggedIn = loggedIn;
-    });
-  }
+  
 }

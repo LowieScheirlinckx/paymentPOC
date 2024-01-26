@@ -22,10 +22,8 @@ export class FormComponent implements OnInit {
   });
   
   submitForm() {
-    console.log(this.validateForm.value)
     if (this.validateForm.valid) {
       this.paymentService.processPayment(this.validateForm.value).subscribe(response => {
-              console.log(response);
                window.location.href = response.checkout.href;
                 
            });
@@ -37,21 +35,6 @@ export class FormComponent implements OnInit {
         }
       });
     }
-
-  //   try {
-  //     this.paymentService.processPayment({
-  //         amount: { currency: 'EUR', value: this.bedrag.toFixed(2) },
-  //         description: this.description,
-  //         redirectUrl: 'http://localhost:4200/payments',
-  //     }).subscribe(response => {
-  //         console.log(response);
-  //         window.location.href = response.checkout.href;
-
-          
-  //     });
-  // } catch (error) {
-  //     console.error(error);
-  // }
 }
 submitPayment() {
       

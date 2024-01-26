@@ -1,6 +1,9 @@
 # PaymentPOC
 
 Payment Integration Proof of Concept Angular frontend.
+
+Log in to view your payments and create new payments using Mollie.
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.1.0.
 
 
@@ -11,9 +14,13 @@ npm install
 ## Setup environments.ts
 
 `src/environments/environment.ts`
+
 export const environment = {
+
     apiUrl: 'http://localhost:3000',
+
     baseUrl: 'http://localhost:4200'
+
 };
 
 ## Development server

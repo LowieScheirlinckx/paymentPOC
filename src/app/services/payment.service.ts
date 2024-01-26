@@ -12,7 +12,6 @@ export class PaymentService {
     }
     
     processPayment(values: any): Observable<any> {
-        console.log(values)
         const body = {
                 amount: { currency: 'EUR', value: values.amount.toFixed(2) },
                 description: values.description,
